@@ -1,7 +1,20 @@
-This is the code companion to my one act, one man show,
-_Monads & Gonads_.
+DOUG CROCKFORD's TYPELESS MONAD
+-------------------------------
+This is my collection of experiences using the typeless monad.
+Download the project and doubleclick usemonad.html
 
-It contains two JavaScript files:
+WIP
+---
+1) elaborating the so-called Ajax monad --> see usemonad.js
 
-    monad.js    for making monads
-    vow.js      for making promises
+NEXT STEPS
+----------
+2) experimenting the Maybe monad
+
+3) preparing a State monad
+
+4) understanding the vows
+
+
+I am also in debt with:
+- http://tritarget.org/blog/2014/04/05/monads-by-mistake/
