@@ -7,10 +7,10 @@ WIP
 ---
 1) elaborating the so-called Ajax monad --> see ajaxmonad.js
 2) experimenting the Maybe monad --> see maybemonad.js
+3) preparing a State monad object --> see statemonad.js
 
 NEXT STEPS
 ----------
-3) preparing a State monad
 4) understanding the vows
 
 I am also in debt with:

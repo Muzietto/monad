@@ -2,54 +2,64 @@
 (function () {
     'use strict';
 
-    var STATE = MONAD(function (monad, value) {
-            // NB: monad = s -> [s,a], value = scalar
+    var STATE = MONAD(function (monad, stateFun) {
+            // NB: monad = , stateFun = s -> [s,a]
             monad.bind = function (func, args) {
                 return STATE(function (state) {
-                    var scp = monad(state),
+                    var scp = monad.run(state),
                     nextState = scp[0],
                     nextValue = scp[1];
-                    return func(nextValue)(nextState);
+                    return func(nextValue).run(nextState);
                 });
-            }
-            return value;
+            };
+            monad.run = function (state) {
+                return stateFun(state);
+            };
+            return stateFun;
         })
-        .method('setState',function(value){
-            return STATE(function(state){ return [state,value]; });
+        .method('setState', function (newState) {
+            return STATE(function () {
+                return [newState, undefined];
+            });
         })
-        .method('getState',function(state){
-            return STATE(function(_){ return [state,state]}; );
+        .method('getState', function () {
+            return STATE(function (state) {
+                return [state, state];
+            });
         });
 
-    // a constructor for bindable functions
-    var fVamb = function (V) {
-        return function (a) {
-            return MAYBE(a + V);
-        }
+    var getText = function (text) {
+        return STATE(function (state) {
+            return [state, prompt(text)];
+        });
     }
 
-    // a show stopper
-    var chainBreaker = function (a) {
-        return MAYBE(undefined);
+    var alertText = function (text) {
+        return STATE(function (state) {
+            return [state, alert(text)];
+        });
     }
 
-    var nothing = MAYBE(null);
+    var start = STATE(function (s) {
+            return [s, undefined]
+        });
 
-    nothing
-    .bind(fVamb('xxx')) // --> no crash
-    .alert(); // --> no popup
+    /*
+    var askThenGreet = do
+        _ <- start
+        x <- getText('your name please?')
+        _ <- alertText('welcome, ' + x)
+        return _
+     */
 
-    var some = MAYBE('some');
+    var askThenGreet = start
+        .bind(function (_) {
+            return getText('your name please?')
+            .bind(function (x) {
+                return alertText('welcome, ' + x);
+            })
+        });
 
-    some
-    .bind(fVamb('X'))
-    .bind(fVamb('YZ'))
-    .alert(); // 'someXYZ'
-
-    some
-    .bind(fVamb('X'))
-    .bind(chainBreaker) // ouch!
-    .alert(); // --> no popup
-
+    askThenGreet.run(0);
 }
     ())
