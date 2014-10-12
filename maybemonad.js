@@ -12,7 +12,8 @@
                 return null;
             }
             return value;
-        }).lift('alert', alert);
+        })
+        .lift('alert', alert);
 
     // a constructor for bindable functions
     var fVamb = function (V) {
