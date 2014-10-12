@@ -6,15 +6,12 @@ Download the project and doubleclick usemonad.html
 WIP
 ---
 1) elaborating the so-called Ajax monad --> see ajaxmonad.js
+2) experimenting the Maybe monad --> see maybemonad.js
 
 NEXT STEPS
 ----------
-2) experimenting the Maybe monad
-
 3) preparing a State monad
-
 4) understanding the vows
-
 
 I am also in debt with:
 - http://tritarget.org/blog/2014/04/05/monads-by-mistake/
