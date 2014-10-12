@@ -6,10 +6,11 @@
      * and one method to extract the value */
     var ajax = MONAD()
         .lift('alert', alert)
-        .lift('concat', function (s /*, stringToConcat */) {
+        // monad.concat will be a monad
+        .lift('concat', function (s /*, arguments */) {
             return s.concat(arguments[1]); // e.g. monad.concat('A')
         })
-        // gotta use lift_value because a lift-ed fun would return a monad
+        // monad.value will be a plain value
         .lift_value('value', function (s) {
             return s;
         });
