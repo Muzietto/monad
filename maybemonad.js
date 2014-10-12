@@ -14,11 +14,18 @@
             return value;
         }).lift('alert', alert);
 
+    // a constructor for bindable functions
     var fVamb = function (V) {
-        return function (s) {
-            return MAYBE(s + V);
+        return function (a) {
+            return MAYBE(a + V);
         }
     }
+
+    // a show stopper
+    var chainBreaker = function(a){
+        return MAYBE(undefined);
+    }
+    
     var nothing = MAYBE(null);
 
     nothing
@@ -28,7 +35,14 @@
     var some = MAYBE('some');
 
     some
-    .bind(fVamb('xxx'))
-    .alert();
-}
+    .bind(fVamb('X'))
+    .bind(fVamb('YZ'))
+    .alert(); // 'someXYZ'
+
+    some
+    .bind(fVamb('X'))
+    .bind(chainBreaker) // ouch!
+    .alert(); // --> no popup
+    
+    }
     ())
