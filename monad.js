@@ -20,9 +20,12 @@
 //    monad.bind(alert);
 
 //    var ajax = MONAD()
-//        .lift('alert', alert);
+//        .lift('alert', alert)
+//        .lift('concat', function (s /*, arguments */) {
+//            return s.concat(arguments[1]);
+//        });
 //    var monad = ajax("Hello world.");
-//    monad.alert();
+//    monad.concat(" Here I am!").alert();
 
 //    var maybe = MONAD(function (monad, value) {
 //        if (value === null || value === undefined) {
@@ -33,9 +36,49 @@
 //            return null;
 //        }
 //        return value;
-//    });
-//    var monad = maybe(null);
-//    monad.bind(alert);    // Nothing happens.
+//        })
+//
+//    // a constructor for bindable functions
+//    var func = function (V) {
+//        return function (a) {
+//            return maybe(a + V);
+//        }
+//    }
+//    var none = maybe(null);
+//    none
+//    .bind(func('xxx')) // No crash
+//    .bind(alert);      // Nothing happens.
+//    var some = maybe('some');
+//    .bind(func('X'))
+//    .bind(func('YZ'))
+//    .bind(alert);    // 'someXYZ'
+
+//    var STATE = MONAD(function (monad, stateFun) {
+//            monad.bind = function (func, args) {
+//                return STATE(function (state) {
+//                    var scp = monad.run(state),
+//                    nextState = scp[0],
+//                    nextValue = scp[1];
+//                    return func(nextValue).run(nextState);
+//                });
+//            };
+//            monad.run = function (state) {
+//                return stateFun(state);
+//            };
+//            return stateFun;
+//        });
+//
+//    STATE.setState = function (newState) {
+//        return STATE(function () {
+//            return [newState, undefined];
+//        });
+//    };
+//
+//    STATE.getState = function () {
+//        return STATE(function (state) {
+//            return [state, state];
+//        });
+//    };
 
 function MONAD(modifier) {
     'use strict';
