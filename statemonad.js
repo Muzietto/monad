@@ -64,7 +64,7 @@
             return alertText('welcome, ' + x);
         });
 
-    //askThenGreet.run('whatever');
+    askThenGreet.run('whatever');
 
     // test 2) state monad as list processor
 
@@ -73,9 +73,9 @@
      *   list match
      *      | [] -> return (s -> (s,[]))
      *      | x:xs -> do
-     *          bb <- listLabeler xs
      *          n  <- getState()
      *          _  <- setState(n+1)
+     *          bb <- listLabeler xs
      *          return $ [n,x]:bb
      */
 
@@ -86,14 +86,14 @@
             });
         } else {
             var x = list.shift();
-            return listLabeler(list)
-            .bind(function (bb) {
-                return STATE.getState()
-                .bind(function (n) {
-                    return STATE.setState(n + 1)
-                    .bind(function () {
+            return STATE.getState()
+            .bind(function (n) {
+                return STATE.setState(n + 1)
+                .bind(function (_) {
+                    return listLabeler(list)
+                    .bind(function (bb) {
                         return STATE(function (s) {
-                            return bb.unshift([n, x]);
+                            return [s, [[n, x]].concat(bb)];
                         });
                     });
                 });
@@ -101,13 +101,16 @@
         }
     };
 
-    var testList = ['a', 'b', 'c', 'd'];
+    var testList = ['a', 'b', 'c', 'd','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
     var listMonad = listLabeler(testList);
-    var labeledScp = listMonad(0);
+    var labeledScp = listMonad.run(0);
     var finalState = labeledScp[0];
     var labeledList = labeledScp[1];
 
-    alert('finalState=' + finalState); // must be 4
-    alert('labeledList[0]=' + labeledList[0]); // must be [1,'a']
+    alert('finalState=' + finalState); // must be 26
+    alert('labeledList[0]=' + labeledList[0]); // must be [0,'a']
+    alert('labeledList[3]=' + labeledList[3]); // must be [3,'d']
+    alert('labeledList[25]=' + labeledList[25]); // must be [25,'z']
 }
     ())
+
