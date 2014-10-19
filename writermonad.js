@@ -1,15 +1,42 @@
 
 (function () {
     'use strict';
-
+    
     var writer = MONAD(function(monad, couple) {
         // NB: monad = object, couple = [value,monoid]
+        
+        if (!Array.isArray(couple)) {
+            couple = [couple,''];
+        }
         var value = couple[0];
         var monoid = couple[1];
         
+        var mappend = function(monoid) {
+            switch (typeof monoid) {
+                case 'number': 
+                case 'string': 
+                    return function(value) { return monoid + value; }
+                    break;
+                case 'function':
+                    return function(value) { return monoid.mappend(value); }
+                    break;
+                case 'object': 
+                    if (Array.isArray(monoid)) {
+                        return function(value) { return monoid.concat(value); }
+                    }
+                //case 'Maybe': 
+                case 'Sum': 
+                case 'Prod': 
+                case 'Any': 
+                case 'All': 
+                case 'Ord': 
+                    return function(value) { return monoid.mappend(value); }
+            }
+        }(monoid);
+        
         monad.bind = function(fawb) {
             var newCouple = fawb(value);
-            return [newCouple[0],monoid.append(monoid.value,newCouple[1])];
+            return [newCouple[0],mappend(newCouple[1])];
         }
         
         return couple;
@@ -26,24 +53,14 @@
             return s;
         });
 */
-    var start = writer();
+    var start = writer(5);
     
     var isBigGang = function(x) {
         return [x>9,'compared gang size to 9'];
     }
     
-    // first monad produced
-    var firstSteps = start.concat('A').concat('B').concat('C');
+    var checkGang = start.bind(isBigGang);
     
-    // final monad
-    var otherSteps = firstSteps
-        .bind(function (a) { // using bind on the fly
-            return ajax(a.length + 'EEE' + arguments[1])
-        },['_Z_']).concat('f');
-
-    // window takes care of the first popup, while ajax produces the string
-    alert(firstSteps.value()); // '-->ABC'
-    // the monad takes care of all
-    otherSteps.alert();  // '6EEE_Z_f'
+    alert(checkGang[1]);
 }
     ())
