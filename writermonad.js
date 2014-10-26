@@ -3,10 +3,11 @@
     'use strict';
     
     var writer = MONAD(function(monad, couple) {
-        // NB: monad = object, couple = [value,monoid]
+        // NB: monad = object, couple = [value, monoid]
         
+        // default monoid is string
         if (!Array.isArray(couple)) {
-            couple = [couple,''];
+            couple = [couple, ''];
         }
         var value = couple[0];
         var monoid = couple[1];
@@ -17,14 +18,15 @@
                 case 'string': 
                     return function(value) { return monoid + value; }
                     break;
-                case 'function':
-                    return function(value) { return monoid.mappend(value); }
+                case 'boolean': // use case for booleans is form validation
+                    return function(value) { return monoid && value; }
                     break;
                 case 'object': 
                     if (Array.isArray(monoid)) {
                         return function(value) { return monoid.concat(value); }
                     }
                 //case 'Maybe': 
+                case 'function':
                 case 'Sum': 
                 case 'Prod': 
                 case 'Any': 
@@ -34,9 +36,9 @@
             }
         }(monoid);
         
-        monad.bind = function(fawb) {
+        monad.bind = function(fawb) { // fawb = a -> Writer b
             var newCouple = fawb(value);
-            return [newCouple[0],mappend(newCouple[1])];
+            return [newCouple[0], mappend(newCouple[1])];
         }
         
         return couple;
