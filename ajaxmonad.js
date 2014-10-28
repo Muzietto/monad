@@ -1,6 +1,10 @@
 
 (function () {
     'use strict';
+    
+    var identity = MONAD();
+    var id = identity('Hello, I\'m an identity\nTry to stop me from alerting you...');
+    id.bind(alert); // no way to stop it...
 
     /* my own ajax implementation has also one method to concat strings
      * and one method to extract the value */

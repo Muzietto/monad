@@ -24,6 +24,7 @@
                 case 'object': 
                     if (Array.isArray(monoid)) {
                         return function(value) { return monoid.concat(value); }
+                        break;
                     }
                 //case 'Maybe': 
                 case 'function':
@@ -38,7 +39,7 @@
         
         monad.bind = function(fawb) { // fawb = a -> Writer b
             var newCouple = fawb(value);
-            return [newCouple[0], mappend(newCouple[1])];
+            return writer([newCouple[0], mappend(newCouple[1])]);
         }
         
         return couple;
@@ -55,14 +56,21 @@
             return s;
         });
 */
-    var start = writer(5);
+    // string as monoid
+    var smallish = writer([5,'Smallish gang.']);
+    var larger = writer([15,'Large gang.']);    
+    var isBigGang = function(x) { return [x>9,'Compared gang size to 9.']; }
     
-    var isBigGang = function(x) {
-        return [x>9,'compared gang size to 9'];
-    }
+    var checkSmall = smallish.bind(isBigGang);    
+    //alert(checkSmall);
+    var checkLarge = larger.bind(isBigGang);    
+    //alert(checkLarge);
+
+    // list as monoid
+    var xxx = writer(0,[]);
+    var carryOn = function(x) { return [x+1,[x]]; }
+    var enumerationOfTwo = xxx.bind(carryOn).bind(carryOn);
     
-    var checkGang = start.bind(isBigGang);
-    
-    alert(checkGang[1]);
+    alert(enumerationOfTwo);
 }
     ())

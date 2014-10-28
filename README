@@ -8,10 +8,12 @@ WIP
 1) elaborating the so-called Ajax monad --> see ajaxmonad.js
 2) experimenting the Maybe monad --> see maybemonad.js
 3) preparing a State monad object --> see statemonad.js
+4) preparing a Writer monad object --> see writermonad.js
 
 NEXT STEPS
 ----------
-4) understanding the vows
+5) preparing a Prob monad object
+6) understanding the vows
 
 I am also in debt with:
 - http://tritarget.org/blog/2014/04/05/monads-by-mistake/
