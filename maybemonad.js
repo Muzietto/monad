@@ -3,7 +3,7 @@
     'use strict';
 
     // a maybe with alerting capabilities (or not...)
-    var MAYBE = MONAD(function (monad, value) {
+    var maybe = MONAD(function (monad, value) {
             if (value === null || typeof value === 'undefined') {
                 monad.is_null = true;
                 monad.bind = function () {
@@ -18,22 +18,22 @@
     // a constructor for bindable functions
     var fVamb = function (V) {
         return function (a) {
-            return MAYBE(a + V);
+            return maybe(a + V);
         }
     }
 
     // a show stopper
     var chainBreaker = function(a){
-        return MAYBE(undefined);
+        return maybe(undefined);
     }
-    
-    var nothing = MAYBE(null);
+
+    var nothing = maybe(null);
 
     nothing
     .bind(fVamb('xxx')) // --> no crash
     .alert(); // --> no popup
 
-    var some = MAYBE('some');
+    var some = maybe('some');
 
     some
     .bind(fVamb('X'))

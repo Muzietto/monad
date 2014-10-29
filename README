@@ -1,7 +1,12 @@
 DOUG CROCKFORD's TYPELESS MONAD
 -------------------------------
 This is my collection of experiences using the typeless monad.
-Download the project and doubleclick usemonad.html
+Download the project and doubleclick usemonad.html.
+
+Comment-uncomment <script> tags inside it to exercise the various monads.
+
+This repo is presented at 
+http://faustinelli.wordpress.com/2014/10/29/beyond-monads-and-gonads/
 
 WIP
 ---
