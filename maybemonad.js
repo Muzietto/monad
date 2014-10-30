@@ -24,26 +24,26 @@
 
     // a show stopper
     var chainBreaker = function(a){
-        return maybe(undefined);
+        return maybe(undefined); // that's a Nothing
     }
 
     var nothing = maybe(null);
 
     nothing
-    .bind(fVamb('xxx')) // --> no crash
-    .alert(); // --> no popup
+        .bind(fVamb('xxx')) // --> no crash
+        .alert(); // --> no popup
 
     var some = maybe('some');
 
     some
-    .bind(fVamb('X'))
-    .bind(fVamb('YZ'))
-    .alert(); // 'someXYZ'
+        .bind(fVamb('X'))
+        .bind(fVamb('YZ'))
+        .alert(); // 'someXYZ'
 
     some
-    .bind(fVamb('X'))
-    .bind(chainBreaker) // ouch!
-    .alert(); // --> no popup
+        .bind(fVamb('X'))
+        .bind(chainBreaker) // ouch!
+        .alert(); // --> no popup
     
     }
     ())
