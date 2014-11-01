@@ -111,7 +111,7 @@
     alert('labeledList[3]=' + labeledList[3]); // must be [3,'d']
     alert('labeledList[25]=' + labeledList[25]); // must be [25,'z']
     
-    // STATE WITH ERROR (SE) --> value is now [?error,value]
+    // STATE WITH ERROR (SE) --> value is now [?error,value||exc]
     var SE = MONAD(function(monad,seFun) {
         monad.bind = function(fasb){
             return SE(function(s){
