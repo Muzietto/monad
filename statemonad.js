@@ -47,41 +47,42 @@
         });
     }
 
-    var start = STATE(function(s) {
+    // same example from http://faustinelli.wordpress.com/2013/08/14/handling-io-with-the-state-monad-in-javascript/
+    var start_ref = STATE(function(s) {
             return [s, undefined]
         });
 
     /*
-     * var askThenGreet = do
-     *     _ <- start
-     *     x <- getText('your name please?')
-     *     _ <- alertText('welcome, ' + x)
+     * var askThenGreet_ref = do
+     *     _ <- start_ref
+     *     x <- getText('REF - your name please?')
+     *     _ <- alertText('REF - welcome, ' + x)
      *     return _
      */
-    var askThenGreet = start
+    var askThenGreet_ref = start_ref
         .bind(function(_) {
-            return getText('your name please?')
+            return getText('REF - your name please?')
         })
         .bind(function(x) {
-            return alertText('welcome, ' + x);
+            return alertText('REF - welcome, ' + x);
         });
 
-    askThenGreet.run('whatever');
+    askThenGreet_ref.run('whatever');
 
     // PERFECTLY chainable state monad with binary bound functions
-    var start2 = STATE
-        .lift('getText2',function(x,y){ return getText(y)})
-        .lift('alertText2',function(x,y){ return alertText(y+' '+x)})
+    var start = STATE
+        .lift('getText',function(x,y){ return getText(y)})
+        .lift('alertText',function(x,y){ return alertText(y+' '+x)})
         (function(s) {
             return [s, undefined]
         });
     
     // chain of calls without bind
-    var askThenGreet2 = start2
-        .getText2('your name please? - 2')
-        .alertText2('welcome - 2');
+    var askThenGreet = start
+        .getText('your name please?')
+        .alertText('welcome');
 
-    askThenGreet2.run('whatever');
+    askThenGreet.run('whatever');
         
     // test 2) state monad as list processor
 
