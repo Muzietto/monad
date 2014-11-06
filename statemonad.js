@@ -9,7 +9,10 @@
                 var scp = monad.run(state),
                 nextState = scp[0],
                 nextValue = scp[1];
-                return func(nextValue).run(nextState);
+                return func.apply(
+                    undefined,
+                    [nextValue].concat(Array.prototype.slice.apply(args || []))
+                ).run(nextState);
             });
         };
         monad.run = function(state) {
@@ -65,6 +68,21 @@
 
     askThenGreet.run('whatever');
 
+    // PERFECTLY chainable state monad with binary bound functions
+    var start2 = STATE
+        .lift('getText2',function(x,y){ return getText(y)})
+        .lift('alertText2',function(x,y){ return alertText(y+' '+x)})
+        (function(s) {
+            return [s, undefined]
+        });
+    
+    // chain of calls without bind
+    var askThenGreet2 = start2
+        .getText2('your name please? - 2')
+        .alertText2('welcome - 2');
+
+    askThenGreet2.run('whatever');
+        
     // test 2) state monad as list processor
 
     /*
@@ -178,7 +196,7 @@
     alert('badFinalState = ' + badFinalState); // must be 1 (why not 0?!?)
     alert('badLabeledEither[0] = errorStatus = ' + badLabeledEither[0]); // must be true
     alert('badLabeledEither[1] = error message = ' + badLabeledEither[1]); // must be 'got a c!!!'
-    
+
 }
     ())
 
